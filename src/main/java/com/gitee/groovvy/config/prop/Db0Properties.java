@@ -1,11 +1,15 @@
 package com.gitee.groovvy.config.prop;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author wanghuaan
+ * @date 2020/8/6
+ **/
 @Component
 @ConfigurationProperties(prefix="datasource.db0")
 public class Db0Properties {

@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * @author wanghuaan
+ * @date 2020/8/6
+ **/
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -27,7 +32,7 @@ public class UserController {
 	@GetMapping("/get/{param}")
 	public Object get(@PathVariable("param") String param) {
 		Map<String, Object> map = new HashMap<>();
-		User user = dataSourceContext.searchUserList(param);
+		User user = dataSourceContext.searchUser(param);
 		map.put("user", user);
 		return map;
 	}

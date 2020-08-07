@@ -12,11 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * 多数据源切面
- * 
- * @author Taven
- *
- */
+ * @author wanghuaan
+ * @date 2020/7/21
+ **/
 @Aspect
 @Component
 public class DynamicDataSourceAspect {

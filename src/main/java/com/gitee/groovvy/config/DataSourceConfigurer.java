@@ -3,6 +3,7 @@ package com.gitee.groovvy.config;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.gitee.groovvy.config.prop.Db0Properties;
 import com.gitee.groovvy.config.prop.Db1Properties;
+import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +22,10 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * 多数据源配置
- * 
- * @author Taven
- *
- */
+ * @author wanghuaan
+ * @date 2020/8/6
+ **/
 @Configuration
-//@MapperScan("com.gitee.taven.mapper")
 public class DataSourceConfigurer {
 
 	@Autowired private Db0Properties db0Properties;
@@ -41,7 +39,7 @@ public class DataSourceConfigurer {
      *
      * @return data source
      */
-    @Bean("dataSource0")
+    @Bean
     @Primary
     public DataSource dataSource0() {
     	DataSource dataSource = null;
@@ -59,7 +57,7 @@ public class DataSourceConfigurer {
      *
      * @return data source
      */
-    @Bean("dataSource1")
+    @Bean
     public DataSource dataSource1() {
     	DataSource dataSource = null;
 		try {
@@ -87,26 +85,25 @@ public class DataSourceConfigurer {
         return dynamicRoutingDataSource;
     }
 
-    /**
-     * Sql session factory bean.
-     * Here to config datasource for SqlSessionFactory
-     * <p>
-     * You need to add @{@code @ConfigurationProperties(prefix = "mybatis")}, if you are using *.xml file,
-     * the {@code 'mybatis.type-aliases-package'} and {@code 'mybatis.mapper-locations'} should be set in
-     * {@code 'application.properties'} file, or there will appear invalid bond statement exception
-     *
-     * @return the sql session factory bean
-     */
+
     @Bean
 //    @ConfigurationProperties(prefix = "mybatis")
     public SqlSessionFactoryBean sqlSessionFactoryBean() {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         // 必须将动态数据源添加到 sqlSessionFactoryBean
         sqlSessionFactoryBean.setDataSource(dynamicDataSource());
+        //手动配置mapperlocations
         sqlSessionFactoryBean.setMapperLocations(resolveMapperLocations());
+        //配置sql打印
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        configuration.setLogImpl(StdOutImpl.class);
+        sqlSessionFactoryBean.setConfiguration(configuration);
         return sqlSessionFactoryBean;
     }
 
+    /**
+     * 自动配置mapperlocations不知道为什么失效，手动配置
+     */
     public Resource[] resolveMapperLocations() {
         ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
         List<String> mapperLocations = new ArrayList<>();

@@ -20,7 +20,8 @@ public class Db2Strategy implements ProcedureStrategy {
 
 
     @Override
-    public User searchUserList(String type) {
+    public User searchUser(String type) {
+        System.out.println("假装调用db2的存储过程");
         User user = userMapper.selectByPrimaryKey(1);
 
         return user;

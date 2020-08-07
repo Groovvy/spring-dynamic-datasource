@@ -1,24 +1,21 @@
 package com.gitee.groovvy.config;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.pool.DruidDataSourceFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.pool.DruidDataSourceFactory;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * 动态数据源
- * 
- * @author Taven
- *
- */
+ * @author wanghuaan
+ * @date 2020/7/21
+ **/
 public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -75,7 +72,8 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
 				if (connection != null && !connection.isClosed()) 
 					connection.close();
 			}
-    		String database = map.get("database");//获取要添加的数据库名
+			//获取要添加的数据库名
+    		String database = map.get("database");
     		if (StringUtils.isBlank(database)) return false;
     		if (DynamicRoutingDataSource.isExistDataSource(database)) return true; 
     		DruidDataSource druidDataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(map);
@@ -83,7 +81,6 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
 			Map<Object, Object> targetMap = DynamicRoutingDataSource.targetDataSources;
 			targetMap.put(database, druidDataSource);
 			// 当前 targetDataSources 与 父类 targetDataSources 为同一对象 所以不需要set
-//			this.setTargetDataSources(targetMap);
 			this.afterPropertiesSet();
 			logger.info("dataSource [{}] has been added", database);
 		} catch (Exception e) {

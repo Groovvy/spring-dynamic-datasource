@@ -16,14 +16,20 @@ import java.util.Map;
 @Component
 public class DataSourceContext {
 
+
+
     @Autowired
     private Map<String, ProcedureStrategy> map = new HashMap<>();
 
-    public User searchUserList(String type){
-        return map.get(type).searchUserList(type);
+    /**
+     *
+     * 采用策略模式,根据传入动态数据源选择不同的service执行
+     * @param type 数据源的名字对应 serveice beanName
+     * @return
+     */
+    public User searchUser(String type){
+        return map.get(type).searchUser(type);
     }
-
-
 
 
 

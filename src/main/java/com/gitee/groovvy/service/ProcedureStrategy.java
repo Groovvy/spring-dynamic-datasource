@@ -9,8 +9,8 @@ import com.gitee.groovvy.entity.User;
  **/
 public interface ProcedureStrategy {
     /**
-     * 调用SYS_USER存储过程
+     * 调用不同数据库的存储过程
      */
-    public User searchUserList(String type);
+    public User searchUser(String type);
 
 }
